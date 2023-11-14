@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:weather/forecast.dart';
 import 'package:weather/repo.dart';
+import 'package:weather/repo2.dart';
 import 'package:weather/weather_model.dart';
 
 void main() {
@@ -16,8 +18,50 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   TextEditingController controller = TextEditingController();
   WeatherModel weatherModel = WeatherModel();
-  double a = 0.0;
+  // WeatherInfo? weatherInfo;
+  WeatherData? weatherData;
+  double? a;
   String city = 'Rajshahi';
+
+  box() {
+    Row(
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/cloud.jpeg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            children: [
+              Text("1",
+                // "${weatherData?.list[1].main.temp}",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Color.fromRGBO(0, 0, 0, 0.8))),
+              const Padding(
+                padding: EdgeInsets.all(7.0),
+              ),
+              const Text(
+                "day",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                    color: Color.fromRGBO(0, 0, 0, .8)),
+              ),
+            ],
+          ),
+        ),
+        const Padding(
+          padding: EdgeInsets.all(10.0),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,14 +113,20 @@ class _MyAppState extends State<MyApp> {
               ElevatedButton(
                   onPressed: () async {
                     weatherModel = await Repo().getWeather(controller.text);
-                    print(weatherModel.main?.temp ?? "error");
-                    setState(() {});
+                    weatherData = await Repo2().getForecast(controller.text);
+                    // a = weatherData?.list[0].main.temp;
+                    // print(a);
+                    setState(() {
+                      // weatherInfo = weatherData as WeatherInfo?;
+                    });
                   },
                   child: const Text("search")),
 
               Row(
                 children: [
-                  const Padding(padding: EdgeInsets.all(10.0),),
+                  const Padding(
+                    padding: EdgeInsets.all(10.0),
+                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -104,7 +154,11 @@ class _MyAppState extends State<MyApp> {
                       ),
                       // Text(city , style: const TextStyle(fontWeight: FontWeight.bold, color: Color.fromARGB(100, 20, 100, 255)),),
                       Text(
-                        "${weatherModel.main?.tempMin}/${weatherModel.main?.tempMax}",
+                        // "${weatherModel.main?.tempMin}/${weatherModel.main?.tempMax}",
+
+                        "temp ${weatherData?.list[0].main.temp}",
+                        // "temp ${weatherData?.list[0].main.temp}",
+                        // "temp ${weatherData?.city}",
                         style: const TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 15,
@@ -137,9 +191,19 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ],
               ),
-              const Padding(padding: EdgeInsets.all(20.0),),
-              const Text("Forecast of next days" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40, color: Color.fromARGB(99, 227, 230, 236)),),
-              const Padding(padding: EdgeInsets.all(20.0),),
+              const Padding(
+                padding: EdgeInsets.all(20.0),
+              ),
+              const Text(
+                "Forecast of next days",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 40,
+                    color: Color.fromARGB(99, 227, 230, 236)),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(20.0),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -152,15 +216,61 @@ class _MyAppState extends State<MyApp> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    child: const Column(
+                    child: Column(
                       children: [
-                          Text("32" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Color.fromRGBO(0, 0, 0, 0.8))),
-                         Padding(padding: EdgeInsets.all(7.0),),
-                         Text("day" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromRGBO(0, 0, 0, .8)),),
+                        Text("${weatherData?.list[0].main.temp}",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Color.fromRGBO(0, 0, 0, 0.8))),
+                        const Padding(
+                          padding: EdgeInsets.all(7.0),
+                        ),
+                        const Text(
+                          "day",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Color.fromRGBO(0, 0, 0, .8)),
+                        ),
                       ],
                     ),
                   ),
-                  const Padding(padding: EdgeInsets.all(10.0),),
+                  const Padding(
+                    padding: EdgeInsets.all(10.0),
+                  ),
+                  // Container(
+                  //   width: 80,
+                  //   height: 80,
+                  //   decoration: const BoxDecoration(
+                  //     image: DecorationImage(
+                  //       image: AssetImage('assets/cloud.jpeg'),
+                  //       fit: BoxFit.cover,
+                  //     ),
+                  //   ),
+                  //   child: Column(
+                  //     children: [
+                  //       Text("${weatherData?.list[1].main.temp}",
+                  //           style: const TextStyle(
+                  //               fontWeight: FontWeight.bold,
+                  //               fontSize: 15,
+                  //               color: Color.fromRGBO(0, 0, 0, 0.8))),
+                  //       const Padding(
+                  //         padding: EdgeInsets.all(7.0),
+                  //       ),
+                  //       const Text(
+                  //         "day",
+                  //         style: TextStyle(
+                  //             fontWeight: FontWeight.bold,
+                  //             fontSize: 15,
+                  //             color: Color.fromRGBO(0, 0, 0, .8)),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // const Padding(
+                  //   padding: EdgeInsets.all(10.0),
+                  // ),
                   Container(
                     width: 80,
                     height: 80,
@@ -169,17 +279,30 @@ class _MyAppState extends State<MyApp> {
                         image: AssetImage('assets/cloud.jpeg'),
                         fit: BoxFit.cover,
                       ),
-                      
                     ),
-                    child: const Column(
+                    child: Column(
                       children: [
-                          Text("32" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Color.fromRGBO(0, 0, 0, 0.8))),
-                         Padding(padding: EdgeInsets.all(7.0),),
-                         Text("day" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromRGBO(0, 0, 0, .8)),),
+                        Text("${weatherData?.list[2].main.temp}",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Color.fromRGBO(0, 0, 0, 0.8))),
+                        const Padding(
+                          padding: EdgeInsets.all(7.0),
+                        ),
+                        const Text(
+                          "day",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Color.fromRGBO(0, 0, 0, .8)),
+                        ),
                       ],
                     ),
                   ),
-                  const Padding(padding: EdgeInsets.all(10.0),),
+                  const Padding(
+                    padding: EdgeInsets.all(10.0),
+                  ),
                   Container(
                     width: 80,
                     height: 80,
@@ -189,30 +312,23 @@ class _MyAppState extends State<MyApp> {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    child: const Column(
+                    child: Column(
                       children: [
-                          Text("32" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Color.fromRGBO(0, 0, 0, 0.8))),
-                         Padding(padding: EdgeInsets.all(7.0),),
-                         Text("day" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromRGBO(0, 0, 0, .8)),),
-                      ],
-                    ),
-                  ),
-
-                  const Padding(padding: EdgeInsets.all(10.0),),
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/cloud.jpeg'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: const Column(
-                      children: [
-                          Text("32" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30, color: Color.fromRGBO(0, 0, 0, 0.8))),
-                         Padding(padding: EdgeInsets.all(7.0),),
-                         Text("day" , style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15, color: Color.fromRGBO(0, 0, 0, .8)),),
+                        Text("${weatherData?.list[3].main.temp}",
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: Color.fromRGBO(0, 0, 0, 0.8))),
+                        const Padding(
+                          padding: EdgeInsets.all(7.0),
+                        ),
+                        const Text(
+                          "day",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                              color: Color.fromRGBO(0, 0, 0, .8)),
+                        ),
                       ],
                     ),
                   ),
